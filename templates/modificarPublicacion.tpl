@@ -1,9 +1,3 @@
-<!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
 <html>
     <head>
         <meta charset="utf-8">
@@ -18,7 +12,7 @@ and open the template in the editor.
         <link rel="stylesheet" href="css/w3.css">
         <link rel="stylesheet" href="css/estilos.css">
         <script src="js/jquery-3.3.1.min.js" type="text/javascript"></script>
-        <script src="js/agregarPublicacion.js" type="text/javascript"></script>
+        <script src="js/modificarPublicacion.js" type="text/javascript"></script>
         <title>Registro</title>
     </head>
     <body>
@@ -26,16 +20,16 @@ and open the template in the editor.
             {include file='header.tpl'}
         </header>
         <main>
-            <form enctype="multipart/form-data" method="POST" action="manejadorAgregarPublicacion.php" id="formularioAgregarPublicacion" class="text-center p-5 col-6">
-                <p class="h4 mb-4">Crear nueva publicacion</p>
-                <input type="text" id="txtTitulo" name="txtTitulo" class="form-control mb-4" placeholder="Titulo">
-                <textarea class="form-control" id="txtTexto" name="txtTexto" placeholder="Texto de la publicacion..." rows="7"></textarea>
+            <form enctype="multipart/form-data" method="POST" action="manejadorModificarPublicacion.php" id="formularioModificarPublicacion" class="text-center p-5 col-6">
+                <p class="h4 mb-4">Modificar publicacion</p>
+                <input type="text" id="txtTitulo" name="txtTitulo" class="form-control mb-4" placeholder="Titulo" value="{$pub['titulo']}">
+                <textarea class="form-control" id="txtTexto" name="txtTexto" placeholder="Texto de la publicacion..." rows="7" >{$pub['texto']}</textarea>
                 <div class="row mt-4">
                     <div class="col-lg-6">
                         <label>Tipo</label>
                         <select id='tipoCombo' name='tipoCombo'>
                             {foreach from=$tipos item=tipo}
-                                <option value="{$tipo['tipo_id']}">{$tipo['nombre']}</option>
+                                <option value="{$tipo['tipo_id']}" {if $tipo['tipo_id'] eq $pub['tipo_id']}selected='selected'{/if}>{$tipo['nombre']}</option>
                             {/foreach}
                         </select>
                     </div>
@@ -43,13 +37,14 @@ and open the template in the editor.
                         <label>Categoria</label>
                         <select id='categoriaCombo' name='categoriaCombo'>
                             {foreach from=$categorias item=categoria}
-                                <option value="{$categoria['categoria_id']}">{$categoria['nombre']}</option>
+                                <option value="{$categoria['categoria_id']}" {if $categoria['categoria_id'] eq $pub['categoria_id']}selected='selected'{/if}>{$categoria['nombre']}</option>
                             {/foreach}
                         </select>
                     </div>
                 </div>
                 Subir imagen: <input type="file" id="foto" name="foto" value="Subir imagen" class="btn btn-success btn-sm"/>
                 <button class="btn btn-success my-4 btn-block" type="button" id="btnConfirmar">Confirmar</button>
+                <input type='hidden' id='pubId' name='pubId' value='{$pub['publicacion_id']}'>
             </form>
         </main>
     </body>
