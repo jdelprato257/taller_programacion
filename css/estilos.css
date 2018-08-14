@@ -1,0 +1,59 @@
+.error{
+    background-color: #ff9999;
+    color: #666666;
+}
+
+body{
+    background-color: #e0ffe4
+}
+
+.ok{
+    background-color: #ccffcc;
+    color: #666666;    
+}
+
+.header-background{
+    background-color: #9fff9e;
+}
+
+span{
+    color: #FF0000;
+}
+
+body,h1,h2,h3,h4,h5,h6 {
+    font-family: "Karma", sans-serif
+}
+
+top,bottom{
+    width:100%;z-index:1
+}
+
+top{
+    top:0
+}
+
+bottom{
+    bottom:0
+}
+
+white,.hover-white:hover{
+    color:#000!important;
+    background-color:#fff!important
+}
+
+.homeColumns{
+    width: 25%;
+    text-align: center;
+    padding: 0 5px 0 5px;
+}
+
+.textOverflow{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height:200px;
+}
+
+.homeGrid{
+     overflow:hidden;
+     display:block;
+}
