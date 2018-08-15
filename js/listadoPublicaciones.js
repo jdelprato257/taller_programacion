@@ -1,10 +1,25 @@
 $(document).ready(inicializo);
+var pagina=0;
 
 function inicializo(){
-    traigoPublicaciones();
+    traigoPublicaciones(1);
+    $("#btnIni").click(cambioPagina);
+    $("#btnAnt").click(cambioPagina);
+    $("#btnSig").click(cambioPagina);
+    $("#btnUlt").click(cambioPagina);
 }
 
-function filtro(){
+function toggleCheckbox(){
+    filtro(pagina);
+}
+
+function cambioPagina(){
+    var pag = $(this).attr("alt");
+    filtro(pag);
+}
+
+function filtro(pPagina){
+    pagina = parseInt(pPagina);
     var filtroReceta="";
     if(document.getElementById("tipoReceta").checked){
         filtroReceta="filtroReceta";
@@ -25,17 +40,19 @@ function filtro(){
         url: "filtro.php",
         dataType: "JSON",
         type: "POST",
-        data: "receta=" + filtroReceta + "&nota=" + filtroNota + "&general=" + filtroGeneral + "&postres=" + filtroPostres,
+        data: "receta=" + filtroReceta + "&nota=" + filtroNota + "&general=" + filtroGeneral + "&postres=" + filtroPostres + "&pagina=" +pPagina,
         success: procesoRespuestaPublicaciones
     });
 }
 
-function traigoPublicaciones(){
+function traigoPublicaciones(pPagina){
+    
+    pagina = parseInt(pPagina);
     $.ajax({
         url: "filtro.php",
         dataType: "JSON",
         type: "POST",
-        data: "receta=" + "" + "&nota=" + "" + "&general=" + "" + "&postres=" + "",
+        data: "receta=" + "" + "&nota=" + "" + "&general=" + "" + "&postres=" + "" + "&pagina="+ pPagina,
         success: procesoRespuestaPublicaciones
     });
 }
@@ -70,6 +87,21 @@ function procesoRespuestaPublicaciones(datos){
             tabla = tabla + "</li>";
         }
         $("#bodyPublicaciones").html(tabla);
+        $("#pagina").html(pagina);
+        $("#pagUlt").html(datos["ultima"]);
+        if(pagina-1>0){
+            $("#btnAnt").attr("alt",(pagina-1));
+        }
+        else{
+            $("#btnAnt").attr("alt",1);
+        }
+        if(pagina+1<datos["ultima"]){
+            $("#btnSig").attr("alt",(pagina+1));
+        }
+        else{            
+            $("#btnSig").attr("alt",datos["ultima"]);
+        }
+        $("#btnUlt").attr("alt",datos["ultima"]);
     } else {
         alert("Se produjo un error!");
     }

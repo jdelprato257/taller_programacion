@@ -8,56 +8,78 @@ $receta = $_POST['receta'];
 $nota = $_POST['nota'];
 $general = $_POST['general'];
 $postres = $_POST['postres'];
+$pagina = (int)$_POST['pagina'];
+if($pagina <= 0){
+    $pagina = 1;
+}
 $respuesta = array("status"=>"OK",
-                   "data"=>array());
+                   "data"=>array(),
+                   "ultima" => 0);
 if($conn){
-    $sql = "SELECT * FROM publicaciones p INNER JOIN categorias c ON c.categoria_id=p.categoria_id";     
+    $finalSql = "SELECT *";
+    $sqlCount = "SELECT COUNT(*) cantidad";
+    $sqlRest = " FROM publicaciones p INNER JOIN categorias c ON c.categoria_id=p.categoria_id";     
     $yaEntro = false;
     $ambosTipos=$receta!=""&&$nota!="";
     $ambasCategorias=$general!=""&&$postres!="";
     if(!$ambosTipos){
         if($receta!="" || $recetaHome!=""){
-            $sql .= " WHERE tipo_id = 1";
+            $sqlRest .= " WHERE tipo_id = 1";
             $yaEntro = true;
         }
         if($nota!="" || $notasHome!=""){
             if($yaEntro==true){
-                $sql .= " AND";
+                $sqlRest .= " AND";
             } else {
-                $sql .= " WHERE";
+                $sqlRest .= " WHERE";
             }
-            $sql .= " tipo_id = 2";
+            $sqlRest .= " tipo_id = 2";
             $yaEntro = true;
         }
     }
     if(!$ambasCategorias){
         if($general!=""){
             if($yaEntro==true){
-                $sql .= " AND";
+                $sqlRest .= " AND";
             } else {
-                $sql .= " WHERE";
+                $sqlRest .= " WHERE";
             }
-            $sql .= " categoria_id = 1";
+            $sqlRest .= " p.categoria_id = 1";
             $yaEntro = true;
         }
         if($postres!=""){
             if($yaEntro==true){
-                $sql .= " AND";
+                $sqlRest .= " AND";
             } else {
-                $sql .= " WHERE";
+                $sqlRest .= " WHERE";
             }
-            $sql .= " categoria_id = 2";
+            $sqlRest .= " p.categoria_id = 2";
             $yaEntro = true;
         }
     }
     $parametros = array();
-    $result = $conn->consulta($sql, $parametros);
+    $result = $conn->consulta($sqlCount.$sqlRest, $parametros);
     if($result){
-        $publi = $conn->restantesRegistros();
-        $respuesta["data"] = $publi;
-        unset($_SESSION['recetasHome']);
-        unset($_SESSION['notasHome']);
-    }
+        $fila = $conn->siguienteRegistro();
+        $ultima = ceil($fila['cantidad']/CANTXPAG);
+        $limitSql = " LIMIT " . (($pagina * CANTXPAG)-CANTXPAG) . "," . CANTXPAG;
+        $result = $conn->consulta($finalSql.$sqlRest.$limitSql, $parametros);
+        if($result){
+            $publi = $conn->restantesRegistros();
+            $respuesta["data"] = $publi;
+            $respuesta["ultima"] = $ultima;
+            unset($_SESSION['recetasHome']);
+            unset($_SESSION['notasHome']);
+        } else {
+           $respuesta = array("status"=>"ERROR",
+                           "data"=>array(),
+                           "ultima" => 0);   
+        }
+    } else {
+           $respuesta = array("status"=>"ERROR",
+                           "data"=>array(),
+                           "ultima" => 0);   
+        }
 }
 
 echo json_encode($respuesta);

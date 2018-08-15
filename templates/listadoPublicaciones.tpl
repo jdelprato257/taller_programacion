@@ -28,11 +28,11 @@
                             Tipos de publicaciones
                         </h4>
                         <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="tipoReceta" onclick="filtro();" {if $recetasHome eq 'recetasHome'} checked {/if}>
+                            <input type="checkbox" class="custom-control-input" id="tipoReceta" onclick="toggleCheckbox();" {if $recetasHome eq 'recetasHome'} checked {/if}>
                             <label class="custom-control-label" for="tipoReceta">Recetas</label>
                         </div>
                         <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="tipoNota" onclick="filtro();" {if $notasHome eq 'notasHome'} checked {/if}>
+                            <input type="checkbox" class="custom-control-input" id="tipoNota" onclick="toggleCheckbox();" {if $notasHome eq 'notasHome'} checked {/if}>
                             <label class="custom-control-label" for="tipoNota">Notas</label>
                         </div>
                     </div>  
@@ -41,11 +41,11 @@
                             Categorias de publicaciones
                         </h4>
                         <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="categoriaGeneral" onclick="filtro();">
+                            <input type="checkbox" class="custom-control-input" id="categoriaGeneral" onclick="toggleCheckbox();">
                             <label class="custom-control-label" for="categoriaGeneral">General</label>
                         </div>
                         <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="categoriaPostres" onclick="filtro();">
+                            <input type="checkbox" class="custom-control-input" id="categoriaPostres" onclick="toggleCheckbox();">
                             <label class="custom-control-label" for="categoriaPostres">Postres</label>
                         </div>
                     </div>  
@@ -53,26 +53,11 @@
                     <div class="col-lg-3">
                         <nav>
                             <h4>Paginado</h4>
-                            <ul class="pagination pg-teal">
-                                <!--Arrow left-->
-                                <li class="page-item">
-                                    <a class="page-link" aria-label="Previous">
-                                        <span aria-hidden="true">&laquo;</span>
-                                        <span class="sr-only">Previous</span>
-                                    </a>
-                                </li>
-
-                                <!--Numbers-->
-                                <li class="page-item active"><a class="page-link">1</a></li>
-
-                                <!--Arrow right-->
-                                <li class="page-item">
-                                    <a class="page-link" aria-label="Next">
-                                        <span aria-hidden="true">&raquo;</span>
-                                        <span class="sr-only">Next</span>
-                                    </a>
-                                </li>
-                            </ul>
+                            <input type='button' id='btnIni' alt='1' value='<<'/>
+                            <input type='button' id='btnAnt' alt='' value='<'/>
+                            <span id="pagina">0</span> / <span id="pagUlt">0</span>
+                            <input type='button' id='btnSig' alt='' value='>'/>
+                            <input type='button' id='btnUlt' alt='' value='>>'/>
                         </nav>
                     </div>
                     {if $admin eq 1}
